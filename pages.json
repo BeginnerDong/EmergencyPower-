@@ -1,0 +1,284 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "首页",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/pageDetail/pageDetail",
+			"style": {
+				"navigationBarTitleText": "详情",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/pingjiaList/pingjiaList",
+			"style": {
+				"navigationBarTitleText": "评价",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/confirmOrder/confirmOrder",
+			"style": {
+				"navigationBarTitleText": "确认下单",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/user/user",
+			"style": {
+				"navigationBarTitleText": "我的",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/emergency/emergency",
+			"style": {
+				"navigationBarTitleText": "应急发电",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/emergencyDetail/emergencyDetail",
+			"style": {
+				"navigationBarTitleText": "详情",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/emergency-confirmOrder/emergency-confirmOrder",
+			"style": {
+				"navigationBarTitleText": "确认下单",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/mechanics/mechanics",
+			"style": {
+				"navigationBarTitleText": "工程机械",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/operator/operator",
+			"style": {
+				"navigationBarTitleText": "操作人员",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/user_address/user_address",
+			"style": {
+				"navigationBarTitleText": "服务地址",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/user_addressAdd/user_addressAdd",
+			"style": {
+				"navigationBarTitleText": "添加地址",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/operatorDetail/operatorDetail",
+			"style": {
+				"navigationBarTitleText": "详情",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/operator-confirmOrder/operator-confirmOrder",
+			"style": {
+				"navigationBarTitleText": "确认下单",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/myCollect/myCollect",
+			"style": {
+				"navigationBarTitleText": "我的收藏",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/user_myorder/user_myorder",
+			"style": {
+				"navigationBarTitleText": "我的订单",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/user_myorder_confmOrder/user_myorder_confmOrder",
+			"style": {
+				"navigationBarTitleText": "确认下单",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/user_orderPingJia/user_orderPingJia",
+			"style": {
+				"navigationBarTitleText": "去评价",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/thirdParty-login/thirdParty-login",
+			"style": {
+				"navigationBarTitleText": "登录",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/thirdParty-revisePswd/thirdParty-revisePswd",
+			"style": {
+				"navigationBarTitleText": "修改密码",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/thirdParty-register/thirdParty-register",
+			"style": {
+				"navigationBarTitleText": "注册",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/thirdPartyUser/thirdPartyUser",
+			"style": {
+				"navigationBarTitleText": "第三方",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/thirdParty-overview/thirdParty-overview",
+			"style": {
+				"navigationBarTitleText": "概览",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/thirdParty-storeSet/thirdParty-storeSet",
+			"style": {
+				"navigationBarTitleText": "店铺设置",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/thirdParty-storeSet-personal/thirdParty-storeSet-personal",
+			"style": {
+				"navigationBarTitleText": "个人",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/thirdParty-storeSet-enterprise/thirdParty-storeSet-enterprise",
+			"style": {
+				"navigationBarTitleText": "企业",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/thirdParty_serviceGl/thirdParty_serviceGl",
+			"style": {
+				"navigationBarTitleText": "服务管理",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/thirdParty_serviceGlAdd/thirdParty_serviceGlAdd",
+			"style": {
+				"navigationBarTitleText": "添加服务",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/thirdParty_serviceGl_specsAdd/thirdParty_serviceGl_specsAdd",
+			"style": {
+				"navigationBarTitleText": "添加规格",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/thirdParty_serviceGl_specsEdit/thirdParty_serviceGl_specsEdit",
+			"style": {
+				"navigationBarTitleText": "添加规格",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/thirdParty_myorder/thirdParty_myorder",
+			"style": {
+				"navigationBarTitleText": "我的订单",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/thirdParty_myAssets/thirdParty_myAssets",
+			"style": {
+				"navigationBarTitleText": "我的资产",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/myCashOut/myCashOut",
+			"style": {
+				"navigationBarTitleText": "提现",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/myBankMsg/myBankMsg",
+			"style": {
+				"navigationBarTitleText": "银行卡绑定",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/staff-login/staff-login",
+			"style": {
+				"navigationBarTitleText": "登录",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/staff-revisePswd/staff-revisePswd",
+			"style": {
+				"navigationBarTitleText": "修改密码",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/staffUser/staffUser",
+			"style": {
+				"navigationBarTitleText": "员工",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		},
+		{
+			"path": "pages/staffUser-infor/staffUser-infor",
+			"style": {
+				"navigationBarTitleText": "基本信息",//设置页面标题文字
+				"onReachBottomDistance":100
+			}
+		}
+    ],
+	"globalStyle": {
+		//"navigationStyle":"custom",
+		"navigationBarTextStyle": "white",//导航栏文字蓝色
+		"navigationBarTitleText": "发电小程序",
+		"navigationBarBackgroundColor": "#0094dc"
+	},
+	"condition": { //模式配置，仅开发期间生效
+		"current": 0, //当前激活的模式(list 的索引项)
+		"list": [{
+			"name": "", //模式名称
+			"path": "", //启动页面，必选
+			"query": "" //启动参数，在页面的onLoad函数里面得到
+		}]
+	}
+}

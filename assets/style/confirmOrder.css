@@ -1,0 +1,22 @@
+
+.myRowBetween .item{padding: 30rpx 4%;box-sizing: border-box;}
+	
+/* 地址 */
+.yy-title{width: 20%;}
+.yy-adrs{width: 80%;}
+.yy-adrs .cont{width: 95%;text-align: right;padding-right: 8rpx;box-sizing: border-box;}
+
+.space{flex-wrap: wrap;}
+.space .tt{width: 28%;line-height:60rpx;border-radius: 6rpx;background: #F5F5F5;margin: 30rpx 8% 0rpx 0;}
+.space .tt:nth-of-type(3n){margin-right: 0;}
+
+.seltDay .btn{width: 120rpx; line-height: 48rpx;border-radius: 8rpx;border: 1px solid #b6b6b6; line-height: 50rpx; margin:0 0 20rpx 30rpx;}
+.seltDay .btn.on{background: #0094DC;color: #fff;border: 1px solid #0094DC;}
+
+
+/* 选择费用明细弹框 */
+.costShow{position: fixed; bottom: 120rpx;left: 0; width: 100%;background: #fff; z-index: 90;}
+.costShow .infor{min-height: 160px;max-height: 240px; overflow-y: auto; }
+.costShow .item{padding:15px 4% 0 4%; display: flex; justify-content: space-between; align-items: center;}
+
+
