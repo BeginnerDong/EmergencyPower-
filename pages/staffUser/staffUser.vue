@@ -4,34 +4,36 @@
 			<view class="userHead white pdlr4">
 				<view class="infor pdt20">
 					<view class="left flex">
-						<image class="photo" src="../../static/images/about-img.png" mode=""></image>
+						<view class="photo" style="overflow: hidden;">
+							<open-data type="userAvatarUrl"></open-data>
+						</view>
 						<view style="width: 70%;">
-							<view class="fs14 pdb5">哈喽猫咪</view>
-							<view class="fs13">156230352356</view>
+							<view class="fs14 pdb5"><open-data type="userNickName"></open-data></view>
+							<view class="fs13">{{mainData.phone}}</view>
 						</view>
 					</view>
 				</view>
 			</view>
-			
 			<view class="userBox2 boxShaow radius10 whiteBj">
 				<view class="tit flexRowBetween pdlr4 pdt15 pdb10 borderB1">
 					<view>我的订单</view>
-					<view class="more flexEnd fs12 color9" @click="Router.navigateTo({route:{path:'/pages/thirdParty_myorder/thirdParty_myorder'}})">查看<image class="arrowR" src="../../static/images/arrow-icon.png" mode=""></image></view>
+					<view class="more flexEnd fs12 color9" 
+					@click="Router.navigateTo({route:{path:'/pages/thirdParty_myorder/thirdParty_myorder?type=2'}})">查看<image class="arrowR" src="../../static/images/arrow-icon.png" mode=""></image></view>
 				</view>
 				<view class="menu flexRowBetween color6 fs12 pdtb15 center">
-					<view class="item" @click="Router.navigateTo({route:{path:'/pages/thirdParty_myorder/thirdParty_myorder'}})">
+					<view class="item" @click="Router.navigateTo({route:{path:'/pages/thirdParty_myorder/thirdParty_myorder?type=2'}})">
 						<image src="../../static/images/employees-icon1.png"></image>
 						<view>全部</view>
 					</view>
-					<view class="item" @click="Router.navigateTo({route:{path:'/pages/thirdParty_myorder/thirdParty_myorder'}})">
+					<view class="item" @click="Router.navigateTo({route:{path:'/pages/thirdParty_myorder/thirdParty_myorder?type=2'}})">
 						<image src="../../static/images/employees-icon2.png"></image>
 						<view>待接单</view>
 					</view>
-					<view class="item" @click="Router.navigateTo({route:{path:'/pages/thirdParty_myorder/thirdParty_myorder'}})">
+					<view class="item" @click="Router.navigateTo({route:{path:'/pages/thirdParty_myorder/thirdParty_myorder?type=2'}})">
 						<image src="../../static/images/employees-icon3.png"></image>
 						<view>已接单</view>
 					</view>
-					<view class="item" @click="Router.navigateTo({route:{path:'/pages/thirdParty_myorder/thirdParty_myorder'}})" >
+					<view class="item" @click="Router.navigateTo({route:{path:'/pages/thirdParty_myorder/thirdParty_myorder?type=2'}})" >
 						<image src="../../static/images/employees-icon4.png"></image>
 						<view>已完成</view>
 					</view>

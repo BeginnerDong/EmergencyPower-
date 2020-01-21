@@ -2,11 +2,11 @@
 	<view>
 		
 		<view class="titems fs15 mglr4 center flexRowBetween">
-			<view class="item" @click="Router.navigateTo({route:{path:'/pages/thirdParty-storeSet-personal/thirdParty-storeSet-personal'}})">
+			<view class="item" @click="Router.redirectTo({route:{path:'/pages/thirdParty-storeSet-personal/thirdParty-storeSet-personal'}})">
 				<image class="icon" src="../../static/images/the-store-icon3.png" mode=""></image>
 				<view class="pdt10">个人</view>
 			</view>
-			<view class="item" @click="Router.navigateTo({route:{path:'/pages/thirdParty-storeSet-enterprise/thirdParty-storeSet-enterprise'}})">
+			<view class="item" @click="Router.redirectTo({route:{path:'/pages/thirdParty-storeSet-enterprise/thirdParty-storeSet-enterprise'}})">
 				<image class="icon" src="../../static/images/the-store-icon2.png" mode=""></image>
 				<view class="pdt10">企业</view>
 			</view>

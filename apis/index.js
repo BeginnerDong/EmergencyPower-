@@ -17,11 +17,36 @@ export default {
 		};
 		http.HTTP(allParams);
 	},
+	
+	resetPassword(param, callback) {
+	
+		var allParams = {
+			url: 'Project/Solely/resetPassword',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
 
-	registerSuper(param, callback) {
+	register(param, callback) {
 
 		var allParams = {
-			url: 'Project/Solely/registerSuper',
+			url: 'Project/Solely/register',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
+	bindWechat(param, callback) {
+		var allParams = {
+			url: '/Base/ProgramToken/bindWechat',
 			type: 'post',
 			data: param,
 			sCallback: function(data) {
@@ -149,6 +174,8 @@ export default {
 		};
 		http.HTTP(allParams);
 	},
+	
+	
 
 	tokenGet(param, callback) {
 		var allParams = {
@@ -167,6 +194,34 @@ export default {
 		
 		var allParams = {
 			url: 'Common/Article/get',
+			type: 'post',
+			noToken: true,
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
+	messageGet(param, callback) {
+		
+		var allParams = {
+			url: 'Common/Message/get',
+			type: 'post',
+			noToken: true,
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
+	messageAdd(param, callback) {
+		
+		var allParams = {
+			url: 'Common/Message/add',
 			type: 'post',
 			noToken: true,
 			data: param,
@@ -253,6 +308,32 @@ export default {
 		http.HTTP(allParams);
 	},
 	
+	productUpdate(param, callback) {
+
+		var allParams = {
+			url: 'Common/Product/update',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
+	productAdd(param, callback) {
+	
+		var allParams = {
+			url: 'Common/Product/add',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
 	qrDateGet(param, callback) {
 		var allParams = {
 			url: 'Common/QrDate/get',
@@ -302,7 +383,55 @@ export default {
 		};
 		http.HTTP(allParams);
 	},
-
+	
+	logAdd(param, callback) {
+		var allParams = {
+			url: 'Common/Log/add',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
+	logUpdate(param, callback) {
+		var allParams = {
+			url: 'Common/Log/update',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
+	logGet(param, callback) {
+		var allParams = {
+			url: 'Common/Log/get',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
+	childLabelGet(param, callback) {
+		var allParams = {
+			url: 'Project/Solely/getChildLabel',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
 
 	login(param, callback) {
 
@@ -345,6 +474,30 @@ export default {
 	skuGet(param, callback) {
 		var allParams = {
 			url: 'Common/Sku/get',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
+	skuAdd(param, callback) {
+		var allParams = {
+			url: 'Common/Sku/add',
+			type: 'post',
+			data: param,
+			sCallback: function(data) {
+				callback && callback(data);
+			}
+		};
+		http.HTTP(allParams);
+	},
+	
+	skuUpdate(param, callback) {
+		var allParams = {
+			url: 'Common/Sku/update',
 			type: 'post',
 			data: param,
 			sCallback: function(data) {

@@ -4,10 +4,12 @@
 			<view class="userHead white pdlr4">
 				<view class="infor pdt20">
 					<view class="left flex">
-						<image class="photo" src="../../static/images/about-img.png" mode=""></image>
+						<view class="photo" style="overflow: hidden;">
+							<open-data type="userAvatarUrl"></open-data>
+						</view>
 						<view style="width: 70%;">
-							<view class="fs14 pdb5">昵称昵称昵称昵称</view>
-							<view class="fs13">156230352356</view>
+							<view class="fs14 pdb5"><open-data type="userNickName"></open-data></view>
+							<!-- <view class="fs13">156230352356</view> -->
 						</view>
 					</view>
 				</view>
@@ -19,21 +21,21 @@
 					<view class="more flexEnd fs12 color9" @click="Router.navigateTo({route:{path:'/pages/user_myorder/user_myorder'}})">查看<image class="arrowR" src="../../static/images/arrow-icon.png" mode=""></image></view>
 				</view>
 				<view class="menu flexRowBetween color6 fs12 pdtb15 center">
-					<view class="item" @click="Router.navigateTo({route:{path:'/pages/user_myorder/user_myorder'}})">
+					<view class="item" @click="Router.navigateTo({route:{path:'/pages/user_myorder/user_myorder?current=2'}})">
 						<image src="../../static/images/about-icon1.png"></image>
-						<view>待支付</view>
+						<view>待确认</view>
 					</view>
-					<view class="item" @click="Router.navigateTo({route:{path:'/pages/user_myorder/user_myorder'}})">
+					<view class="item" @click="Router.navigateTo({route:{path:'/pages/user_myorder/user_myorder?current=3'}})">
 						<image src="../../static/images/about-icon2.png"></image>
-						<view>待发货</view>
+						<view>进行中</view>
 					</view>
-					<view class="item" @click="Router.navigateTo({route:{path:'/pages/user_myorder/user_myorder'}})">
+					<view class="item" @click="Router.navigateTo({route:{path:'/pages/user_myorder/user_myorder?current=4'}})">
 						<image src="../../static/images/about-icon3.png"></image>
-						<view>待收货</view>
-					</view>
-					<view class="item" @click="Router.navigateTo({route:{path:'/pages/user_myorder/user_myorder'}})" >
-						<image src="../../static/images/about-icon4.png"></image>
 						<view>已完成</view>
+					</view>
+					<view class="item" @click="Router.navigateTo({route:{path:'/pages/user_myorder/user_myorder?current=5'}})" >
+						<image src="../../static/images/about-icon4.png"></image>
+						<view>已评价</view>
 					</view>
 				</view>
 			</view>
@@ -53,13 +55,13 @@
 					</view>
 					<view class="rr"><image class="arrowR" src="../../static/images/arrow-icon.png" mode=""></image></view>
 				</view>
-				<view class="item flexRowBetween" >
+				<button class="item flexRowBetween" open-type="contact">
 					<view class="ll flex">
 						<image class="icon" src="../../static/images/about-icon7.png" mode=""></image>
-						<view class="">联系客服</view>
+						<view class="" style="font-size:13px">联系客服</view>
 					</view>
 					<view class="rr"><image class="arrowR" src="../../static/images/arrow-icon.png" mode=""></image></view>
-				</view>
+				</button>
 				<view class="item flexRowBetween" @click="Router.navigateTo({route:{path:'/pages/thirdParty-login/thirdParty-login'}})" >
 					<view class="ll flex">
 						<image class="icon" src="../../static/images/about-icon8.png" mode=""></image>
@@ -112,7 +114,8 @@
 			//self.$Utils.loadAll(['getMainData'], self);
 		},
 		methods: {
-
+			
+			
 
 		},
 	};
@@ -122,6 +125,14 @@
 	@import "../../assets/style/editInfor.css";
 	@import "../../assets/style/navbar.css";
 	page{background: #F5F5F5;}
+	button{
+		background: none;
+		line-height: 1.5;
+		margin: 0;
+	}
+	button::after{
+		border: none;
+	}
 	.userHead{height: 340rpx;background: url(../../static/images/about-icon.png) no-repeat 0 0 /100% 100%;}
 	.userHead .photo{width: 120rpx;height: 120rpx;border-radius: 50%;margin-right: 20rpx;}
 	

@@ -41,25 +41,77 @@
 		data() {
 			return {
 				Router:this.$Router,
-				showView: false,
-				wx_info:{},
-				is_show:false
+				Utils:this.$Utils,
+				index: 0,
+				is_show:false,
+				type:'',
+				mode: '',
+				submitData:{
+					phone:'',
+					password:'',
+					passwordCopy:''
+				}
 			}
 		},
-		
 		onLoad(options) {
 			const self = this;
-			// self.$Utils.loadAll(['getMainData'], self);
+			uni.setStorageSync('canClick', true);
 		},
+		
 		methods: {
-			getMainData() {
+			
+			
+			
+			submit() {
 				const self = this;
-				console.log('852369')
+				uni.setStorageSync('canClick', false);
+				var newObject = self.$Utils.cloneForm(self.submitData);
+				
+				const pass = self.$Utils.checkComplete(newObject);
+				console.log('pass', pass);
+				console.log('self.submitData',self.submitData)
+				if (pass) {
+					if(self.submitData.password!=self.submitData.passwordCopy){
+						uni.setStorageSync('canClick', true);
+						self.$Utils.showToast('两次输入密码不一致', 'none');
+						return
+					};
+					self.passwordUpdate();					
+				} else {
+					uni.setStorageSync('canClick', true);
+					self.$Utils.showToast('请补全信息', 'none')
+				};
+			},
+			
+			passwordUpdate() {
+				const self = this;
 				const postData = {};
-				postData.tokenFuncName = 'getProjectToken';
-				self.$apis.orderGet(postData, callback);
-			}
-		}
+				var newObject = self.$Utils.cloneForm(self.submitData);
+				delete newObject.passwordCopy;
+				delete newObject.code;
+				postData.data = {};
+				postData.data = self.$Utils.cloneForm(newObject);
+				postData.smsAuth = {
+					phone:self.submitData.phone,						
+					code:self.submitData.code
+				};
+				const callback = (data) => {				
+					if (data.solely_code == 100000) {					
+						self.$Utils.showToast('修改成功', 'none');
+						setTimeout(function() {
+							uni.navigateBack({
+								delta:1
+							})
+						}, 800);
+					} else {
+						uni.setStorageSync('canClick', true);
+						self.$Utils.showToast(data.msg, 'none', 1000)
+					}	
+				};
+				self.$apis.resetPassword(postData, callback);
+			},
+
+		},
 	};
 </script>
 

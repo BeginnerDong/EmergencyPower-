@@ -10,7 +10,8 @@ import $AssetsConfig from './config/assets.config.js'
 import $RoutesConfig from './config/routes.config.js'
 import $ConstDataConfig from './config/constData.config.js'
 import $modalHelper from './common/modalHelper.js'
-
+import LbPicker from '@/components/lb-picker'
+Vue.component("lb-picker", LbPicker)
 //var jweixin = require('jweixin-module')
 
 

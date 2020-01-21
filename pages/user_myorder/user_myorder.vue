@@ -10,102 +10,60 @@
 		<view class="pdtb25"></view>
 		<view class="pdlr4">
 			<view class="proRowList">
-				<view class="item">
+				<view class="item" v-for="(item,index) in mainData">
 					<view class="flexRowBetween pdb10">
-						<view class="fs12 color9">交易时间：2018-08-30</view>
-						<view class="fs12 red">待确认</view>
+						<view class="fs12 color9">交易时间：{{item.create_time}}</view>
+						<view class="fs12 red" v-if="item.accept==0">待确认</view>
+						<view class="fs12 red" v-if="item.accept==1&&item.transport_status!=2">进行中</view>
+						<view class="fs12 red" v-if="item.transport_status==2&&item.isremark==0">已完成</view>
+						<view class="fs12 red" v-if="item.isremark==1">已评价</view>
 					</view>
-					<view class="flexRowBetween">
+					<view class="flexRowBetween pdb15" v-if="item.product_id>0">
 						<view class="ll">
-							<image src="../../static/images/yingji-img.png"></image>
+							<image :src="item.orderItem&&item.orderItem[0]&&item.orderItem[0].snap_product&&
+							item.orderItem[0].snap_product.mainImg&&item.orderItem[0].snap_product.mainImg[0]?item.orderItem[0].snap_product.mainImg[0].url:''"></image>
 						</view>
 						<view class="rr">
-							<view class="avoidOverflow2 fs13">标题标题标题标题标题标题标题标题标题标题标题标题标题标题</view>
+							<view class="avoidOverflow2 fs13">{{item.orderItem&&item.orderItem[0]&&
+							item.orderItem[0].snap_product?item.orderItem[0].snap_product.title:''}}</view>
 							<view class="Bmny flexRowBetween">
-								<view class="price fs14">56</view>
-								<view class="fs10 color6">×1</view>
+								<view class="price fs14">{{item.price}}</view>
+								<view class="fs10 color6">已付：{{item.service_price}}元</view>
 							</view>
 						</view>
+					</view>
+					<view class="flexRowBetween pdb15" v-if="item.sku_id>0">
+						<view class="ll">
+							<image :src="item.orderItem&&item.orderItem[0]&&item.orderItem[0].snap_product.product&&
+							item.orderItem[0].snap_product.product.mainImg&&item.orderItem[0].snap_product.product.mainImg[0]?
+							item.orderItem[0].snap_product.product.mainImg[0].url:''"></image>
+						</view>
+						<view class="rr">
+							<view class="avoidOverflow2 fs13">{{item.orderItem&&item.orderItem[0]&&
+							item.orderItem[0].snap_product.product?item.orderItem[0].snap_product.product.title:''}}</view>
+							<view style="color:#666;font-size:12px">{{item.orderItem&&item.orderItem[0]&&
+							item.orderItem[0].snap_product?item.orderItem[0].snap_product.title:''}}</view>
+							<view class="Bmny flexRowBetween">
+								<view class="price fs14">{{item.price}}</view>
+								<view class="fs10 color6">已付：{{item.service_price}}元</view>
+							</view>
+						</view>
+					</view>
+					<view class="flexRowBetween pdb15 fs13" v-if="item.price>item.service_price">
+						<view>付款给服务商</view>
+						<view class="give-input"><input type="text" v-model="item.money" placeholder="请输入金额" placeholder-class="placeholder" /></view>
 					</view>
 					<div class="underBtn flexEnd pdb5 pdt15">
-						<span class="Bbtn gary">取消订单</span>
-						<span class="Bbtn" @click="Router.navigateTo({route:{path:'/pages/user_myorder_confmOrder/user_myorder_confmOrder'}})">去支付</span>
+						<span class="Bbtn" v-if="item.accept==1&&item.transport_status!=2" @click="flowLogAdd(index,'all')">完成订单</span>
+						<span class="Bbtn gary" v-if="item.price>item.service_price" @click="flowLogAdd(index)">确定付款</span>
+						<span class="Bbtn gary" @click="orderUpdate(item.id)" v-if="item.accept==0">取消订单</span>
+						<span class="Bbtn" v-if="item.transport_status==2&&item.isremark==0"  :data-id="item.id" 
+						@click="Router.navigateTo({route:{path:'/pages/user_orderPingJia/user_orderPingJia?id='+$event.currentTarget.dataset.id}})">去评价</span>
+						<span class="Bbtn" v-if="item.transport_status==2&&item.isremark==1">已评价</span>
 					</div>
-				</view>
-				<view class="item">
-					<view class="flexRowBetween pdb10">
-						<view class="fs12 color9">交易时间：2018-08-30</view>
-						<view class="fs12 red">进行中</view>
-					</view>
-					<view class="flexRowBetween">
-						<view class="ll">
-							<image src="../../static/images/yingji-img.png"></image>
-						</view>
-						<view class="rr">
-							<view class="avoidOverflow2 fs13">标题标题标题标题标题标题标题标题标题标题标题标题标题标题</view>
-							<view class="Bmny flexRowBetween">
-								<view class="price fs14">56</view>
-								<view class="fs10 color6">×1</view>
-							</view>
-						</view>
-					</view>
-					<view class="flexEnd pdtb15">共1件商品 合计:￥56</view>
-					<view class="flexRowBetween pdb15 fs13">
-						<view>付款给服务商</view>
-						<view class="give-input"><input type="text" value="" placeholder="请输入金额" placeholder-class="placeholder" /></view>
-					</view>
-					<div class="underBtn flexEnd pdb5">
-						<span class="Bbtn">确认</span>
-					</div>
-				</view>
-				<view class="item">
-					<view class="flexRowBetween pdb10">
-						<view class="fs12 color9">交易时间：2018-08-30</view>
-						<view class="fs12 red">已完成</view>
-					</view>
-					<view class="flexRowBetween">
-						<view class="ll">
-							<image src="../../static/images/yingji-img.png"></image>
-						</view>
-						<view class="rr">
-							<view class="avoidOverflow2 fs13">标题标题标题标题标题标题标题标题标题标题标题标题标题标题</view>
-							<view class="Bmny flexRowBetween">
-								<view class="price fs14">56/小时</view>
-								<view class="fs10 color6">×1</view>
-							</view>
-						</view>
-					</view>
-					<view class="flexEnd pdtb15">共1件商品 合计:￥56</view>
-					<div class="underBtn flexEnd pdb5">
-						<span class="Bbtn"  @click="Router.navigateTo({route:{path:'/pages/user_orderPingJia/user_orderPingJia'}})">去评价</span>
-					</div>
-				</view>
-				<view class="item">
-					<view class="flexRowBetween pdb10">
-						<view class="fs12 color9">交易时间：2018-08-30</view>
-						<view class="fs12 red">已评价</view>
-					</view>
-					<view class="flexRowBetween">
-						<view class="ll">
-							<image src="../../static/images/yingji-img.png"></image>
-						</view>
-						<view class="rr">
-							<view class="avoidOverflow2 fs13">标题标题标题标题标题标题标题标题标题标题标题标题标题标题</view>
-							<view class="Bmny flexRowBetween">
-								<view class="price fs14">56/小时</view>
-								<view class="fs10 color6">×1</view>
-							</view>
-						</view>
-					</view>
-					<view class="flexEnd pdtb15">共1件商品 合计:￥56</view>
-					<view class="pdb10">
-						<view class="pdlr4 pdt10 pdb10 f5bj radius8 fs12">科就回归考虑到双方各烘干机撒联合国何健飞道快乐十分个分类山沟加工费是发的是</view>
-					</view>
 				</view>
 			</view>
-			
 		</view>
-		
 	</view>
 </template>
 
@@ -117,28 +75,213 @@
 				showView: false,
 				wx_info:{},
 				is_show:false,
-				current:1
+				current:1,
+				searchItem:{
+					type:1,
+					pay_status:1
+				},
+				mainData:[],
+				money:''
 			}
 		},
 		
 		onLoad(options) {
 			const self = this;
-			// self.$Utils.loadAll(['getMainData'], self);
+			self.paginate = self.$Utils.cloneForm(self.$AssetsConfig.paginate);
+			if(options.current){
+				self.currentNew = options.current;
+			}
 		},
+		
+		onShow() {
+			const self = this;
+			if(self.currentNew&&self.currentNew!=1){
+				self.change(self.currentNew)
+			}else{
+				self.mainData = [];
+				self.getMainData(true)
+			}
+			
+		},
+
+		onReachBottom() {
+			console.log('onReachBottom')
+			const self = this;
+			if (!self.isLoadAll && uni.getStorageSync('loadAllArray')) {
+				self.paginate.currentPage++;
+				self.getMainData()
+			};
+		},
+		
 		methods: {
+			
+			
+			
 			change(current) {
 				const self = this;
 				if(current!=self.current){
-					self.current = current
+					self.current = current;
+					if(self.current==1){
+						delete self.searchItem.transport_status;
+						delete self.searchItem.isremark;
+						delete self.searchItem.accept;
+					}else if(self.current==2){
+						self.searchItem.accept = 0
+						delete self.searchItem.isremark;
+					}else if(self.current==3){
+						self.searchItem.accept = 1;
+						delete self.searchItem.isremark;
+						//self.searchItem.transport_status = 1
+					}else if(self.current==4){
+						self.searchItem.accept = 1;
+						self.searchItem.transport_status = 2;
+						delete self.searchItem.isremark;
+					}else if(self.current==5){
+						self.searchItem.isremark = 1
+					}
+					self.getMainData(true)
 				}
 			},
-			getMainData() {
+			
+			flowLogAdd(index,type) {
 				const self = this;
-				console.log('852369')
+				uni.setStorageSync('canClick',false);
+				if(type&&type=='all'){
+					self.mainData[index].money = (parseFloat(self.mainData[index].price) - parseFloat(self.mainData[index].service_price)).toFixed(2)
+				}
+				if(parseFloat(self.mainData[index].money)>(parseFloat(self.mainData[index].price) - parseFloat(self.mainData[index].service_price))){
+					uni.setStorageSync('canClick',true);
+					self.$Utils.showToast('金额不能大于当前剩余金额','none')
+					return
+				};
+				if(self.mainData[index].product_id>0){
+					var shopMoney = parseFloat(self.mainData[index].money) - parseFloat(self.mainData[index].money)*(parseFloat(self.mainData[index].orderItem[0].snap_product.tax)/100)
+				};
+				if(self.mainData[index].sku_id>0){
+					var shopMoney = parseFloat(self.mainData[index].money) - parseFloat(self.mainData[index].money)*(parseFloat(self.mainData[index].orderItem[0].snap_product.product.tax)/100)
+				};
+				var platformMoney = parseFloat(self.mainData[index].money) - parseFloat(shopMoney);
 				const postData = {};
 				postData.tokenFuncName = 'getProjectToken';
+				postData.data = {
+					count:parseFloat(shopMoney).toFixed(2),
+					thirdapp_id:2,
+					status:1,
+					trade_info:'付款',
+					type:2,
+					account:1,
+					user_no:self.mainData[index].orderItem[0].snap_product.user_no,
+					relation_user:uni.getStorageSync('user_info').user_no
+				};
+				postData.saveAfter = [
+					{
+						tableName: 'FlowLog',
+						FuncName: 'add',
+						data: {
+							count:parseFloat(platformMoney).toFixed(2),
+							thirdapp_id:2,
+							status:1,
+							trade_info:'平台抽佣',
+							type:2,
+							account:1,
+							user_no:'U910872296194660',
+							relation_user:self.mainData[index].orderItem[0].snap_product.user_no
+						},
+					},
+					{
+						tableName: 'Order',
+						FuncName: 'update',
+						data: {
+							service_price:parseFloat(self.mainData[index].service_price) + parseFloat(self.mainData[index].money)
+						},
+						searchItem:{
+							id:self.mainData[index].id,
+							user_type:0
+						}
+					},
+				];
+				if(type&&type=='all'){
+					postData.saveAfter[1].data.transport_status=2
+				};
+				const callback = (data) => {
+					uni.setStorageSync('canClick', true);
+					if (data && data.solely_code == 100000) {
+						self.$Utils.showToast('付款成功','none');
+						setTimeout(function() {
+							self.getMainData(true)
+						}, 1000);
+					} else {
+						self.$Utils.showToast(data.msg,'none')
+					}
+				};
+				self.$apis.flowLogAdd(postData, callback);
+			},
+			
+			orderUpdate(id) {
+				const self = this;
+				const postData = {};
+				postData.tokenFuncName = 'getProjectToken';
+				postData.data = {
+					status:-1
+				};
+				postData.searchItem = {
+					id:id,
+					user_type:0
+				};
+				const callback = (data) => {
+					uni.setStorageSync('canClick', true);
+					if (data && data.solely_code == 100000) {
+						self.$Utils.showToast('操作成功','none');
+						setTimeout(function() {
+							self.getMainData(true)
+						}, 1000);
+					} else {
+						self.$Utils.showToast(data.msg,'none')
+					}
+				};
+				self.$apis.orderUpdate(postData, callback);
+			},
+			
+			getMainData(isNew) {
+				const self = this;
+				if (isNew) {
+					self.mainData = [];
+					self.paginate = {
+						count: 0,
+						currentPage: 1,
+						is_page: true,
+						pagesize: 10
+					}
+				};
+				const postData = {};
+				postData.tokenFuncName = 'getProjectToken';
+				postData.paginate = self.$Utils.cloneForm(self.paginate);
+				postData.searchItem = self.$Utils.cloneForm(self.searchItem);
+				postData.getAfter = {
+					orderItem:{
+						tableName:'OrderItem',
+						middleKey:'order_no',
+						key:'order_no',
+						searchItem:{
+							status:1
+						},
+						condition:'='
+					},
+				};
+				const callback = (res) => {
+					if (res.info.data.length > 0) {
+						self.mainData.push.apply(self.mainData, res.info.data);
+						for (var i = 0; i < self.mainData.length; i++) {
+							self.mainData[i].money = '';
+							self.mainData[i].price = parseFloat(self.mainData[i].price)
+							self.mainData[i].service_price = parseFloat(self.mainData[i].service_price)
+						}
+					}
+					console.log('self.mainData', self.mainData)
+					self.$Utils.finishFunc('getMainData');
+				};
 				self.$apis.orderGet(postData, callback);
-			}
+			},
 		}
 	};
 </script>

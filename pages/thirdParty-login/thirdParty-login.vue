@@ -1,5 +1,5 @@
 <template>
-	<view>
+	<view v-if="showAll">
 		<view><image style="width: 100%;height: 390rpx;" src="../../static/images/the-login-icon2.png" mode="widthFix"></image></view>
 		
 		<view>
@@ -9,7 +9,7 @@
 						<image class="icon" src="../../static/images/the-login-icon1.png" mode=""></image>
 					</view>
 					<view class="rr">
-						<input type="text" value="" placeholder="输入手机号码" placeholder-class="placeholder" />
+						<input type="text" v-model="submitData.login_name" placeholder="输入手机号码" placeholder-class="placeholder" />
 					</view>
 				</view>
 				<view class="item flex">
@@ -17,14 +17,14 @@
 						<image class="icon" src="../../static/images/the-login-icon.png" mode=""></image>
 					</view>
 					<view class="rr flexRowBetween">
-						<input type="text" value="" placeholder="输入密码" placeholder-class="placeholder" />
+						<input type="password" v-model="submitData.password" placeholder="输入密码" placeholder-class="placeholder" />
 					</view>
 				</view>
-				<view class="item flexEnd"><view class="fs13 color6" @click="Router.navigateTo({route:{path:'/pages/thirdParty-revisePswd/thirdParty-revisePswd'}})">修改密码</view></view>
+				<!-- <view class="item flexEnd"><view class="fs13 color6" @click="Router.navigateTo({route:{path:'/pages/thirdParty-revisePswd/thirdParty-revisePswd'}})">修改密码</view></view> -->
 			</view>
 			
 			<view class="submitbtn" style="margin-top: 120rpx;">
-				<button class="btn" type="button" @click="Router.navigateTo({route:{path:'/pages/thirdPartyUser/thirdPartyUser'}})">登录</button>
+				<button class="btn" type="button" @click="submit">登录</button>
 				<view class="fs13 color6 pdtb10" style="width: 80%;margin: 0 auto;" @click="Router.navigateTo({route:{path:'/pages/thirdParty-register/thirdParty-register'}})">没有账号去注册？</view>
 			</view>
 		</view>
@@ -37,25 +37,71 @@
 		data() {
 			return {
 				Router:this.$Router,
-				showView: false,
-				wx_info:{},
-				is_show:false
+				submitData:{
+					login_name:'',
+					password:''
+				},
+				showAll:false
 			}
 		},
 		
 		onLoad(options) {
 			const self = this;
-			// self.$Utils.loadAll(['getMainData'], self);
-		},
-		methods: {
-			getMainData() {
-				const self = this;
-				console.log('852369')
-				const postData = {};
-				postData.tokenFuncName = 'getProjectToken';
-				self.$apis.orderGet(postData, callback);
+			if (uni.getStorageSync('thirdToken')&&uni.getStorageSync('thirdInfo').user_type==1) {
+				uni.redirectTo({
+					url: '/pages/thirdPartyUser/thirdPartyUser'
+				})
+			}else{
+				self.showAll = true
 			}
-		}
+		},
+		
+		methods: {
+			
+			submit() {
+				const self = this;
+			
+				const postData = {
+					login_name: self.submitData.login_name,
+					password:self.submitData.password
+				};
+				if (self.$Utils.checkComplete(self.submitData)) {
+					
+					const callback = (res) => {
+						if (res.solely_code == 100000) {
+							uni.login({
+								success(data) {
+									const c_postData = {
+										code: data.code,
+										token:res.token
+									};
+									const c_callback = (c_res) => {
+										if (c_res.solely_code == 100000) {
+											uni.setStorageSync('thirdToken', res.token);
+											uni.setStorageSync('thirdInfo', res.info);
+											uni.redirectTo({
+												url: '/pages/thirdPartyUser/thirdPartyUser'
+											}) 
+										} else {
+											self.$Utils.showToast(c_res.msg,'none')
+										}
+									}
+									self.$apis.bindWechat(c_postData, c_callback);
+								}
+							})
+							console.log(res);
+							
+						} else {
+							self.$Utils.showToast(res.msg,'none')
+						}
+					}
+					self.$apis.shopLogin(postData, callback);
+				} else {
+					self.$Utils.showToast('请补全登录信息', 'none')
+				};
+			},
+			
+		},
 	};
 </script>
 

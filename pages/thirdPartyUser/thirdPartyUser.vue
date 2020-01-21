@@ -3,10 +3,12 @@
 		<view class="userHead white pdlr4">
 			<view class="infor">
 				<view class="left flex">
-					<image class="photo" src="../../static/images/about-img.png" mode=""></image>
+					<view class="photo" style="overflow: hidden;">
+						<open-data type="userAvatarUrl"></open-data>
+					</view>
 					<view style="width: 70%;">
-						<view class="fs14 pdb5">昵称昵称昵称昵称</view>
-						<view class="fs13">156230352356</view>
+						<view class="fs14 pdb5"><open-data type="userNickName"></open-data></view>
+						<view class="fs13">{{mainData.phone}}</view>
 					</view>
 				</view>
 			</view>
@@ -16,7 +18,7 @@
 				<image class="icon" src="../../static/images/disanfang-icon.png"></image>
 				<view class="tit">概览</view>
 			</view>
-			<view class="item" @click="Router.navigateTo({route:{path:'/pages/thirdParty-storeSet/thirdParty-storeSet'}})">
+			<view class="item" @click="submit">
 				<image class="icon" src="../../static/images/disanfang-icon1.png"></image>
 				<view class="tit">店铺设置</view>
 			</view>
@@ -24,7 +26,7 @@
 				<image class="icon" src="../../static/images/disanfang-icon2.png"></image>
 				<view class="tit">服务管理</view>
 			</view>
-			<view class="item" @click="Router.navigateTo({route:{path:'/pages/thirdParty_myorder/thirdParty_myorder'}})">
+			<view class="item" @click="Router.navigateTo({route:{path:'/pages/thirdParty_myorder/thirdParty_myorder?type=1'}})">
 				<image class="icon" src="../../static/images/disanfang-icon3.png"></image>
 				<view class="tit">我的订单</view>
 			</view>
@@ -45,15 +47,47 @@
 				Router:this.$Router,
 				showView: false,
 				score:'',
-				wx_info:{}
+				wx_info:{},
+				mainData:{}
 			}
 		},
 		onLoad() {
 			const self = this;
-			//self.$Utils.loadAll(['getMainData'], self);
+			self.$Utils.loadAll(['getMainData'], self);
 		},
+		
 		methods: {
-
+			
+			submit(){
+				const self = this;
+				if(self.mainData.identity==0){
+					self.Router.navigateTo({route:{path:'/pages/thirdParty-storeSet/thirdParty-storeSet'}})
+				}else if(self.mainData.identity==1){
+					self.Router.navigateTo({route:{path:'/pages/thirdParty-storeSet-enterprise/thirdParty-storeSet-enterprise'}})
+				}else if(self.mainData.identity==2){
+					self.Router.navigateTo({route:{path:'/pages/thirdParty-storeSet-personal/thirdParty-storeSet-personal'}})
+				}
+			},
+			
+			getMainData() {
+				const self = this;
+				const postData = {};
+				postData.tokenFuncName = 'getThirdToken';
+				postData.searchItem = {
+					user_no:uni.getStorageSync('thirdInfo').user_no
+				};
+				const callback = (res) => {
+					if (res.info.data.length > 0) {
+						self.mainData = res.info.data[0];
+						
+					} else {
+						self.$Utils.showToast('没有更多了', 'none');
+					};
+					console.log('self.mainData', self.mainData)
+					self.$Utils.finishFunc('getMainData');
+				};
+				self.$apis.userInfoGet(postData, callback);
+			},
 		},
 	};
 </script>

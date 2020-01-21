@@ -2,23 +2,31 @@
 	<view>
 		<view class="pdlr4">
 			<view class="specslist">
-				<view class="item" v-for="(item,index) in specsDate" :key="index">
-					<view>名称名称名称名称名称名称名称</view>
+				<view class="item" v-for="(item,index) in mainData" :key="index">
+					<view>{{item.title}}</view>
 					<view class="flexRowBetween pdtb10">
-						<view class="price">56.00</view>
-						<view class="fs12 color6">库存：5620</view>
+						<view class="price">{{item.price}}</view>
+						<view class="fs12 color6">库存：{{item.stock}}</view>
 					</view>
 					<view class="flexEnd">
 						<view class="flex fs12 color6">
-							<view class="flex mgr25"><image class="editIcon" src="../../static/images/address-icon3.png" mode="">删除</image></image></view>
-							<view class="flex"><image class="editIcon" src="../../static/images/address-icon2.png" mode="">编辑</image></image></view>
+							<view class="flex mgr25" :data-id="item.id" @click="skuUpdate($event.currentTarget.dataset.id)">
+								<image class="editIcon" src="../../static/images/address-icon3.png" mode="">
+									删除
+									</image>
+									</image>
+								</view>
+							<view class="flex" :data-id="item.id" 
+							@click="Router.navigateTo({route:{path:'/pages/thirdParty_serviceGl_specsEdit/thirdParty_serviceGl_specsEdit?id='+$event.currentTarget.dataset.id+'&product_no='+product_no}})"><image class="editIcon" 
+							src="../../static/images/address-icon2.png" mode="">编辑</image></image>
+							</view>
 						</view>
 					</view>
 				</view>
 			</view>
 		</view>
 		
-		<view class="fabubtn" @click="Router.navigateTo({route:{path:'/pages/thirdParty_serviceGl_specsEdit/thirdParty_serviceGl_specsEdit'}})">
+		<view class="fabubtn" @click="Router.navigateTo({route:{path:'/pages/thirdParty_serviceGl_specsEdit/thirdParty_serviceGl_specsEdit?product_no='+product_no}})">
 			<image class="icon" src="../../static/images/service-icon.png" mode=""></image>
 		</view>
 	</view>
@@ -32,22 +40,86 @@
 				showView: false,
 				wx_info:{},
 				is_show:false,
-				specsDate:[{},{},{}]
+				specsDate:[{},{},{}],
+				mainData:[],
+				product_no:''
 			}
 		},
 		
 		onLoad(options) {
 			const self = this;
-			// self.$Utils.loadAll(['getMainData'], self);
+			self.product_no = options.product_no;
+			self.paginate = self.$Utils.cloneForm(self.$AssetsConfig.paginate);
+			self.$Utils.loadAll(['getMainData'], self);
 		},
+		
+		onReachBottom() {
+			console.log('onReachBottom')
+			const self = this;
+			if (!self.isLoadAll && uni.getStorageSync('loadAllArray')) {
+				self.paginate.currentPage++;
+				self.getMainData()
+			};
+		},
+		
 		methods: {
-			getMainData() {
+			
+			skuUpdate(id) {
 				const self = this;
-				console.log('852369')
+				uni.showModal({
+					title: '提示',
+					content: '确认是否删除此服务',
+					success: function(res) {
+						if (res.confirm) {
+							const postData = {};
+							postData.searchItem = {};
+							postData.searchItem.id = id;
+							postData.tokenFuncName = 'getThirdToken';
+							postData.data = {
+								status:-1
+							};
+							const callback = (res) => {
+								if (res.solely_code==100000) {
+									self.getMainData(true);
+								}else{
+									self.$Utils.showToast(res.msg,'none');	
+								}
+							};
+							self.$apis.skuUpdate(postData, callback)
+						} else if (res.cancel) {
+							console.log('用户点击取消');
+						}
+					}
+				});
+			},
+			
+			getMainData(isNew) {
+				const self = this;
+				self.mainData = [];
+				if (isNew) {
+					self.mainData = [];
+					self.paginate = {
+						count: 0,
+						currentPage: 1,
+						is_page: true,
+						pagesize: 10
+					}
+				};
 				const postData = {};
-				postData.tokenFuncName = 'getProjectToken';
-				self.$apis.orderGet(postData, callback);
-			}
+				postData.paginate = self.$Utils.cloneForm(self.paginate);
+				postData.searchItem = {
+					thirdapp_id: 2,
+					product_no:self.product_no
+				};
+				const callback = (res) => {
+					if (res.info.data.length > 0) {
+						self.mainData.push.apply(self.mainData, res.info.data);
+					}
+					console.log('self.mainData', self.mainData)
+					self.$Utils.finishFunc('getMainData');
+				};
+				self.$apis.skuGet(postData, callback);
+			},
 		}
 	};
 </script>

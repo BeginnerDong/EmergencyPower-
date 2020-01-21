@@ -1,78 +1,123 @@
 import assetsConfig from "@/config/assets.config.js";
-
+import token from '@/common/token.js';
+var QQMapWX = require('@/common/qqmap-wx-jssdk.min.js');
+var wxMap = new QQMapWX({
+	key: '4BEBZ-ZM43U-U6SVY-BZ5X3-44T35-4ZFD6' // 必填
+});
 export default {
-	
-	
+
+
 
 	realPay(param, callback) {
-	
-		function onBridgeReady(param) {
-			WeixinJSBridge.invoke(
-				'getBrandWCPayRequest', {
-					"appId": "wx7db54ed176405e24", //公众号名称，由商户传入     
-					'timeStamp': param.timeStamp,
-					'nonceStr': param.nonceStr,
-					'package': param.package,
-					'signType': param.signType,
-					'paySign': param.paySign,
-				},
-				function(res) {
-	
-					if (res.err_msg == "get_brand_wcpay_request:ok") {
-						// 使用以上方式判断前端返回,微信团队郑重提示：
-						//res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
-						callback && callback(1);
-					} else {
-/* 						alert(JSON.stringify(res));
-						alert(res.err_msg); */
-						callback && callback(0);
-					}
+		uni.requestPayment({
+			provider: 'wxpay',
+			'timeStamp': param.timeStamp,
+			'nonceStr': param.nonceStr,
+			'package': param.package,
+			'signType': param.signType,
+			'paySign': param.paySign,
+			success: function(res) {
+				console.log(res);
+				wx.showToast({
+					title: '支付成功',
+					icon: 'none',
+					duration: 1000,
+					mask: true
 				});
-		}
-		if (typeof WeixinJSBridge == "undefined") {
-			if (document.addEventListener) {
-				document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
-			} else if (document.attachEvent) {
-				document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
-				document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+
+				callback && callback(1);
+			},
+			fail: function(res) {
+				console.log(res);
+				wx.showToast({
+					title: '支付失败',
+					icon: 'none',
+					duration: 1000,
+					mask: true
+				});
+				callback && callback(0);
 			}
-		} else {
-			onBridgeReady(param);
-		}
-	
+		});
 	},
-	
+
+
+	uploadFile(filePath, name, formData, callback) {
+		var that = this;
+		const c_callback = (res) => {
+			that.uploadFile(filePath, name, formData, callback);
+		};
+		console.log('uploadFile', formData)
+		if (formData.tokenFuncName) {
+			if (formData.refreshTokn) {
+				token[formData.tokenFuncName](c_callback, {
+					refreshToken: true
+				});
+			} else {
+				formData.token = token[formData.tokenFuncName](c_callback);
+			};
+			if (!formData.token) {
+				return;
+			};
+		};
+		wx.uploadFile({
+			url: 'http://106.12.155.217/power/public/index.php/api/v1/Base/FtpFile/upload',
+			filePath: filePath,
+			name: name,
+			formData: formData,
+			success: function(res) {
+				if (res.data) {
+					res.data = JSON.parse(res.data);
+				};
+				if (res.data.solely_code == '200000') {
+					token[formData.tokenFuncName](c_callback, {
+						refreshToken: true
+					});
+				} else {
+					callback && callback(res.data);
+				};
+			},
+			fail: function(err) {
+				wx.showToast({
+					title: '网络故障',
+					icon: 'fail',
+					duration: 2000,
+					mask: true,
+				});
+			}
+		})
+	},
+
 	getHashParameters() {
-		
-		
-		if(location.search){
+
+
+		if (location.search) {
 			var searchArr = location.search.substr(1).split('&');
 		};
-		if(location.hash&&location.hash .split('?')[1]){
-			var hashArr = location.hash .split('?')[1].split('&');
-			var hash = location.hash .split('?')[0]
+		if (location.hash && location.hash.split('?')[1]) {
+			var hashArr = location.hash.split('?')[1].split('&');
+			var hash = location.hash.split('?')[0]
 		};
 		var arr = [];
-		if(searchArr){
+		if (searchArr) {
 			arr = arr.concat(searchArr)
 		};
-		if(hashArr){
+		if (hashArr) {
 			arr = arr.concat(hashArr)
 		};
 		var params = {};
 		for (var i = 0; i < arr.length; i++) {
 			var data = arr[i].split('=')
 			if (data.length === 2) {
-			  params[data[0]] = data[1]
+				params[data[0]] = data[1]
 			};
 		};
-		
-		if(!hash){
+
+		if (!hash) {
 			var hash = location.hash
 		};
 
-		return [params,hash]
-    },
+		return [params, hash]
+	},
 
 	showToast(title, type, duration, func) {
 		uni.showToast({
@@ -101,14 +146,14 @@ export default {
 	},
 
 	inArray(value, array) {
-		
+
 		return array.indexOf(parseInt(value));
 	},
 
 	finishFunc(funcName) {
 		uni.setStorageSync('canClick', true);
 		var loadArray = uni.getStorageSync('loadAllArray');
-		console.log('loadArray',loadArray)
+		console.log('loadArray', loadArray)
 		if (loadArray && loadArray.length > 0) {
 			var length = loadArray.indexOf(funcName);
 			if (length >= 0) {
@@ -122,6 +167,45 @@ export default {
 		};
 	},
 
+	distance(la1, lo1, la2, lo2) {
+		var La1 = la1 * Math.PI / 180.0;
+		var La2 = la2 * Math.PI / 180.0;
+		var La3 = La1 - La2;
+		var Lb3 = lo1 * Math.PI / 180.0 - lo2 * Math.PI / 180.0;
+		var s = 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(La3 / 2), 2) + Math.cos(La1) * Math.cos(La2) * Math.pow(Math.sin(
+			Lb3 / 2), 2)));
+		s = s * 6378.137;
+		s = Math.round(s * 10000) / 10000;
+		s = s.toFixed(2);
+		return s;
+	},
+
+	getAuthSetting(callback) {
+		wx.getSetting({
+			success: setting => {
+				if (!setting.authSetting['scope.userInfo']) {
+					wx.hideLoading();
+					uni.setStorageSync('canClick', true);
+					this.showToast('授权请点击同意', 'none');
+				} else {
+					uni.getUserInfo({
+						provider: 'weixin',
+						success: function(infoRes) {
+							console.log('-------获取微信用户所有-----');
+							console.log(JSON.stringify(infoRes.userInfo));
+							callback && callback(infoRes.userInfo, setting);
+						}
+					});
+
+					/* wx.getUserInfo({
+						success: function(user) {
+							
+						}
+					}); */
+				};
+			}
+		});
+	},
 
 	/* 
 	 * 将cityNo 转 cityName
@@ -444,7 +528,7 @@ export default {
 		if (wx.getStorageSync(objName)) {
 			var history = wx.getStorageSync(objName);
 			var limitSum = self.getJsonLength(history);
-			
+
 
 			if (history[res[name]]) {
 				history[res[name]] = res;
@@ -476,7 +560,7 @@ export default {
 		const self = this;
 		if (wx.getStorageSync(objName)) {
 			var history = wx.getStorageSync(objName);
-			
+
 			if (history[name]) {
 				history[name][fieldName] = field;
 				wx.setStorageSync(objName, history);
@@ -491,7 +575,7 @@ export default {
 		const self = this;
 		if (wx.getStorageSync(objName)) {
 			var history = wx.getStorageSync(objName);
-			
+
 			if (history[name]) {
 				delete history[name];
 				wx.setStorageSync(objName, history);
@@ -520,6 +604,97 @@ export default {
 			wx.setStorageSync(objName, history);
 		}
 	},
+	
+	getLocation(type, callback) {
+		wx.getSetting({
+			success: (res) => {
+				if (res.authSetting['scope.userLocation'] != undefined && res.authSetting['scope.userLocation'] != true) { //非初始化进入该页面,且未授权
+					callback&&callback(res)
+				} else if (res.authSetting['scope.userLocation'] == undefined) { //初始化进入
+					wx.getLocation({
+					  type: 'gcj02',
+					  success: function (res) {
+					    var latitude = res.latitude
+					    var longitude = res.longitude
+					    
+					    if(type=='getGeocoder'){
+					        callback&&callback(res)
+					        return;
+					    };
+					    if(type=='reverseGeocoder'){
+					        wxMap.reverseGeocoder({
+					          location: {
+					            latitude: latitude,
+					            longitude: longitude
+					          },
+					          success: function (res) {
+					            callback&&callback(res.result)
+					          },
+					          fail(res){
+					            wx.showToast({
+					                title:'获取位置失败',
+					                icon:'none',
+					                duration:2000,
+					                mask:true,
+					            });
+					          }
+					        });  
+					    }
+					  },
+					  fail(res) {
+					    wx.showToast({
+					        title:'获取经纬度失败',
+					        icon:'none',
+					        duration:2000,
+					        mask:true,
+					    }); 
+					  }
+					})
+				} else { //授权后默认加载
+					wx.getLocation({
+					  type: 'gcj02',
+					  success: function (res) {
+					    var latitude = res.latitude
+					    var longitude = res.longitude
+						/* var latitude = 33.0678400000
+						var longitude = 107.0319400000 */
+					    if(type=='getGeocoder'){
+					        callback&&callback(res)
+					        return;
+					    };
+					    if(type=='reverseGeocoder'){
+					        wxMap.reverseGeocoder({
+					          location: {
+					            latitude: latitude,
+					            longitude: longitude
+					          },
+					          success: function (res) {
+					            callback&&callback(res.result)
+					          },
+					          fail(res){
+					            wx.showToast({
+					                title:'获取位置失败',
+					                icon:'none',
+					                duration:2000,
+					                mask:true,
+					            });
+					          }
+					        });  
+					    }
+					  },
+					  fail(res) {
+					    wx.showToast({
+					        title:'获取经纬度失败',
+					        icon:'none',
+					        duration:2000,
+					        mask:true,
+					    }); 
+					  }
+					})
+				}
+			}
+		})
+	},
 
 	skuChoose(skuData, choosed_sku_item) {
 		const self = this;
@@ -530,33 +705,33 @@ export default {
 		can_choose_sku_item = self.cloneForm(choosed_sku_item);
 		for (var i = 0; i < skuData.length; i++) {
 			if (JSON.stringify(skuData[i].sku_item.sort()) == JSON.stringify(choosed_sku_item.sort())) {
-				choosed_skuData = self.cloneForm(skuData[i]);	
+				choosed_skuData = self.cloneForm(skuData[i]);
 				var finish = true;
 				can_choosed_sku_item = self.cloneForm(skuData[i].sku_item);
-				
+
 			} else {
 				if (choosed_sku_item.length > 0) {
 					var all = true;
-					
+
 					var choosedLength = choosed_sku_item.length;
-					if(choosedLength>1){
+					if (choosedLength > 1) {
 						for (var c_i = 0; c_i < choosedLength; c_i++) {
 							if (skuData[i].sku_item.indexOf(choosed_sku_item[c_i]) == -1) {
 								all = false;
 							};
 						};
 					};
-					
+
 					if (all) {
 						can_choose_sku_item.push.apply(can_choose_sku_item, skuData[i].sku_item);
-						if(!finish){
+						if (!finish) {
 							can_choosed_sku_item = self.cloneForm(skuData[i].sku_item);
-						};	
+						};
 					};
 				} else {
 					can_choose_sku_item.push.apply(can_choose_sku_item, skuData[i].sku_item);
 				};
-				
+
 			};
 		};
 
@@ -667,10 +842,10 @@ export default {
 		var seperator1 = "-";
 		var seperator2 = ":";
 		var date = parseInt(date);
-		
-		
+
+
 		var date = new Date(date);
-		
+
 		var month = date.getMonth() + 1;
 		var strDate = date.getDate();
 		if (month >= 1 && month <= 9) {
@@ -695,6 +870,32 @@ export default {
 			var currentdate = date.getHours() + seperator2 + date.getMinutes() + seperator2 + date.getSeconds();
 		}
 		return currentdate;
+	},
+
+	secondTo(second_time) {
+
+		var time = parseInt(second_time) + "秒";
+		if (parseInt(second_time) > 60) {
+
+			var second = parseInt(second_time) % 60;
+			var min = parseInt(second_time / 60);
+			time = min + "分" + second + "秒";
+
+			if (min > 60) {
+				min = parseInt(second_time / 60) % 60;
+				var hour = parseInt(parseInt(second_time / 60) / 60);
+				time = hour + "小时" + min + "分" + second + "秒";
+
+				if (hour > 24) {
+					hour = parseInt(parseInt(second_time / 60) / 60) % 24;
+					var day = parseInt(parseInt(parseInt(second_time / 60) / 60) / 24);
+					time = day + "天" + hour + "小时" + min + "分" + second + "秒";
+				}
+			}
+
+		}
+
+		return time;
 	}
 
 }

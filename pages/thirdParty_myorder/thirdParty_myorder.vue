@@ -9,136 +9,93 @@
 		<view class="pdtb25"></view>
 		<view class="pdlr4">
 			<view class="proRowList">
-				<view class="item">
+				<view class="item" v-for="(item,index) in mainData">
 					<view class="flexRowBetween pdb10">
-						<view class="fs12 color9">交易时间：2018-08-30</view>
-						<view class="fs12 red">待接单</view>
+						<view class="fs12 color9">交易时间：{{item.create_time}}</view>
+						<view class="fs12 red" v-if="item.accept==0">待接单</view>
+						<view class="fs12 red" v-if="item.accept==1&&item.transport_status!=2">已接单</view>
+						<view class="fs12 red" v-if="item.transport_status==2">已完成</view>
 					</view>
-					<view class="flexRowBetween">
+					<view class="flexRowBetween pdb15" v-if="item.product_id>0">
 						<view class="ll">
-							<image src="../../static/images/yingji-img.png"></image>
+							<image :src="item.orderItem&&item.orderItem[0]&&item.orderItem[0].snap_product&&
+							item.orderItem[0].snap_product.mainImg&&item.orderItem[0].snap_product.mainImg[0]?item.orderItem[0].snap_product.mainImg[0].url:''"></image>
 						</view>
 						<view class="rr">
-							<view class="avoidOverflow2 fs13">标题标题标题标题标题标题标题标题标题标题标题标题标题标题</view>
+							<view class="avoidOverflow2 fs13">{{item.orderItem&&item.orderItem[0]&&
+							item.orderItem[0].snap_product?item.orderItem[0].snap_product.title:''}}</view>
 							<view class="Bmny flexRowBetween">
-								<view class="price fs14">56</view>
-								<view class="fs10 color6">×1</view>
+								<view class="price fs14">{{item.orderItem&&item.orderItem[0]&&
+							item.orderItem[0].snap_product?item.orderItem[0].snap_product.price:''}}</view>
+							<view class="price fs14">{{item.price}}</view>
+								<view class="fs10 color6">已付：{{item.service_price}}元</view>
 							</view>
 						</view>
 					</view>
-					<div class="underBtn flexEnd pdb5 pdt15">
-						<span class="Bbtn gary">拒绝接单</span>
-						<span class="Bbtn"  @click="jiedanShow">接单</span>
-					</div>
-				</view>
-				<view class="item">
-					<view class="flexRowBetween pdb10">
-						<view class="fs12 color9">交易时间：2018-08-30</view>
-						<view class="fs12 red">已完成</view>
-					</view>
-					<view class="flexRowBetween">
+					<view class="flexRowBetween pdb15" v-if="item.sku_id>0">
 						<view class="ll">
-							<image src="../../static/images/yingji-img.png"></image>
+							<image :src="item.orderItem&&item.orderItem[0]&&item.orderItem[0].snap_product.product&&
+							item.orderItem[0].snap_product.product.mainImg&&item.orderItem[0].snap_product.product.mainImg[0]?
+							item.orderItem[0].snap_product.product.mainImg[0].url:''"></image>
 						</view>
 						<view class="rr">
-							<view class="avoidOverflow2 fs13">标题标题标题标题标题标题标题标题标题标题标题标题标题标题</view>
+							<view class="avoidOverflow2 fs13">{{item.orderItem&&item.orderItem[0]&&
+							item.orderItem[0].snap_product.product?item.orderItem[0].snap_product.product.title:''}}</view>
+							<view style="color:#666;font-size:12px">{{item.orderItem&&item.orderItem[0]&&
+							item.orderItem[0].snap_product?item.orderItem[0].snap_product.title:''}}</view>
 							<view class="Bmny flexRowBetween">
-								<view class="price fs14">56</view>
-								<view class="fs10 color6">×1</view>
+								<!-- <view class="price fs14">{{item.orderItem&&item.orderItem[0]&&
+							item.orderItem[0].snap_product.product?item.orderItem[0].snap_product.product.price:''}}</view> -->
+							<view class="price fs14">{{item.price}}</view>
+							<view class="fs10 color6">已付：{{item.service_price}}元</view>
 							</view>
 						</view>
 					</view>
-					<view class="flexEnd pdtb15">共1件商品 合计:￥56</view>
-				</view>
-				<view class="item">
-					<view class="flexRowBetween pdb10">
-						<view class="fs12 color9">交易时间：2018-08-30</view>
-						<view class="fs12 red">已接单</view>
-					</view>
-					<view class="flexRowBetween">
-						<view class="ll">
-							<image src="../../static/images/yingji-img.png"></image>
-						</view>
-						<view class="rr">
-							<view class="avoidOverflow2 fs13">标题标题标题标题标题标题标题标题标题标题标题标题标题标题</view>
-							<view class="Bmny flexRowBetween">
-								<view class="price fs14">56/小时</view>
-								<view class="fs10 color6">×1</view>
-							</view>
-						</view>
-					</view>
-					<view class="flexEnd pdtb15">共1件商品 合计:￥56</view>
-					<view class="textList">
+					<!-- <view class="flexEnd pdtb15">共1件商品 合计:￥56</view> -->
+					<view class="textList" v-if="item.accept==1">
 						<view class="lis flex pdb5">
 							<view class="name fs12 color6 mgr15">时间</view>
-							<view class="text fs13">2019.12.11</view>
+							<view class="text fs13">{{item.book_time}}</view>
 						</view>
 						<view class="lis flex pdb5">
 							<view class="name fs12 color6 mgr15">地点</view>
-							<view class="text fs13">陕西省西安市雁塔区高新大都荟</view>
+							<view class="text fs13">
+							{{item.snap_address&&item.snap_address.city?item.snap_address.city+item.snap_address.detail:''}}
+							</view>
 						</view>
-						<view class="lis flex pdb5">
+						<view class="lis flex pdb5" v-if="item.sku_id>0">
 							<view class="name fs12 color6 mgr15">规格</view>
-							<view class="text fs13">挖掘机·全包</view>
+							<view class="text fs13">{{item.orderItem&&item.orderItem[0]&&
+							item.orderItem[0].snap_product?item.orderItem[0].snap_product.title:''}}</view>
 						</view>
 					</view>
 					<div class="underBtn flexEnd pdb5 pdt10">
-						<span class="Bbtn">完成</span>
+						
+						<span class="Bbtn gary"  v-if="item.accept==0" @click="orderUpdate(item.id,'no')">拒绝接单</span>
+						<span class="Bbtn" v-if="item.accept==0"  @click="jiedanShow(item.id,index)">接单</span>
 					</div>
-				</view>
-				<view class="item">
-					<view class="flexRowBetween pdb10">
-						<view class="fs12 color9">交易时间：2018-08-30</view>
-						<view class="fs12 red">已完成</view>
-					</view>
-					<view class="flexRowBetween">
-						<view class="ll">
-							<image src="../../static/images/yingji-img.png"></image>
-						</view>
-						<view class="rr">
-							<view class="avoidOverflow2 fs13">标题标题标题标题标题标题标题标题标题标题标题标题标题标题</view>
-							<view class="Bmny flexRowBetween">
-								<view class="price fs14">56/小时</view>
-								<view class="fs10 color6">×1</view>
-							</view>
-						</view>
-					</view>
-					<view class="flexEnd pdtb15">共1件商品 合计:￥56</view>
-					<view class="textList">
-						<view class="lis flex pdb5">
-							<view class="name fs12 color6 mgr15">时间</view>
-							<view class="text fs13">2019.12.11</view>
-						</view>
-						<view class="lis flex pdb5">
-							<view class="name fs12 color6 mgr15">地点</view>
-							<view class="text fs13">陕西省西安市雁塔区高新大都荟</view>
-						</view>
-						<view class="lis flex pdb5">
-							<view class="name fs12 color6 mgr15">规格</view>
-							<view class="text fs13">挖掘机·全包</view>
-						</view>
-					</view>
 				</view>
 			</view>
 		</view>
-		
+	
 		<view class="black-bj" v-show="is_show"></view>
 		<view class="jiedanShow radius10" v-show="is_jiedanShow">
 			<view class="closebtn fs20 color9" @click="jiedanShow">×</view>
 			<view class="item flex">
 				<view class="name fs12">时间</view>
-				<view class="text fs13">2019/12/12</view>
+				<view class="text fs13">{{mainData[index]?mainData[index].book_time:''}}</view>
 			</view>
 			<view class="item flex">
 				<view class="name fs12">地点</view>
-				<view class="text fs13">陕西省西安市雁塔区大都荟</view>
+				<view class="text fs13">{{mainData[index]&&mainData[index].snap_address&&mainData[index].snap_address.city?mainData[index].snap_address.city+mainData[index].snap_address.detail:''}}</view>
 			</view>
-			<view class="item flex">
+			<view class="item flex" v-if="mainData[index].sku_id>0">
 				<view class="name fs12">规格</view>
-				<view class="text fs13 flex"><view class="lable">挖掘机·全包</view></view>
+				<view class="text fs13 flex"><view class="lable">{{mainData[index]&&mainData[index].orderItem&&mainData[index].orderItem[0]&&
+				mainData[index].orderItem[0].snap_product?mainData[index].orderItem[0].snap_product.title:''}}</view></view>
 			</view>
 			<view class="submitbtn pdt30 pdb25">
-				<button class="btn" type="button" @click="toast1Tap">确认接单</button>
+				<button class="btn" type="button" @click="orderUpdate">确认接单</button>
 			</view>
 		</view>
 		
@@ -154,41 +111,143 @@
 				wx_info:{},
 				is_show:false,
 				current:1,
-				is_jiedanShow:false
+				is_jiedanShow:false,
+				mainData:[],
+				searchItem:{
+					type:1,
+					user_type:0,
+					pay_status:1
+				},
+				willId:-1,
+				index:-1
 			}
 		},
 		
 		onLoad(options) {
 			const self = this;
-			// self.$Utils.loadAll(['getMainData'], self);
+			self.type=options.type;
+			self.paginate = self.$Utils.cloneForm(self.$AssetsConfig.paginate);
+			
+			self.$Utils.loadAll(['getMainData'], self);
 		},
+		
+		onReachBottom() {
+			console.log('onReachBottom')
+			const self = this;
+			if (!self.isLoadAll && uni.getStorageSync('loadAllArray')) {
+				self.paginate.currentPage++;
+				self.getMainData()
+			};
+		},
+		
 		methods: {
+			
+			orderUpdate(id,type) {
+				const self = this;
+				const postData = {};
+				postData.tokenFuncName = 'getThirdToken';
+				postData.data = {
+					accept:1
+				};
+				postData.searchItem = {
+					id:self.willId,
+					user_type:0
+				};
+				if(type&&type=='no'){
+					postData.data.accept = -1;
+					postData.searchItem.id = id;
+				};
+				const callback = (data) => {
+					uni.setStorageSync('canClick', true);
+					if (data && data.solely_code == 100000) {
+						self.$Utils.showToast('操作成功','none');
+						self.is_show = false;
+						self.is_jiedanShow = false;
+						setTimeout(function() {
+							self.getMainData(true)
+						}, 1000);
+					} else {
+						self.$Utils.showToast(data.msg,'none')
+					}
+				};
+				self.$apis.orderUpdate(postData, callback);
+			},
+			
 			change(current) {
 				const self = this;
 				if(current!=self.current){
-					self.current = current
+					self.current = current;
+					if(self.current==1){
+						delete self.searchItem.transport_status;
+						delete self.searchItem.isremark;
+						delete self.searchItem.accept;
+					}else if(self.current==2){
+						self.searchItem.accept = 0
+						delete self.searchItem.transport_status;
+					}else if(self.current==3){
+						self.searchItem.accept = 1;
+						//self.searchItem.transport_status = 1
+						delete self.searchItem.transport_status;
+					}else if(self.current==4){
+						self.searchItem.accept = 1;
+						self.searchItem.transport_status = 2
+					}
+					self.getMainData(true)
 				}
 			},
-			jiedanShow(){
+			
+			jiedanShow(id,index){
 				const self = this;
+				self.willId = id;
+				self.index = index;
 				self.is_show = !self.is_show
 				self.is_jiedanShow = !self.is_jiedanShow
 			},
-			toast1Tap() {
-				uni.showToast({
-					title: "接单成功"
-				})
+			
+
+			getMainData(isNew) {
 				const self = this;
-				self.is_show = !self.is_show
-				self.is_jiedanShow = !self.is_jiedanShow
-			},
-			getMainData() {
-				const self = this;
-				console.log('852369')
+				if (isNew) {
+					self.mainData = [];
+					self.paginate = {
+						count: 0,
+						currentPage: 1,
+						is_page: true,
+						pagesize: 10
+					}
+				};
 				const postData = {};
-				postData.tokenFuncName = 'getProjectToken';
+				postData.tokenFuncName = 'getThirdToken';
+				postData.paginate = self.$Utils.cloneForm(self.paginate);
+				postData.searchItem = self.$Utils.cloneForm(self.searchItem);
+				if(self.type==2){
+					postData.searchItem.shop_no = 'U910872296194660'
+				}else{
+					postData.searchItem.shop_no = uni.getStorageSync('thirdInfo').user_no
+				};
+				//postData.shop_no = 
+				postData.getAfter = {
+					orderItem:{
+						tableName:'OrderItem',
+						middleKey:'order_no',
+						key:'order_no',
+						searchItem:{
+							status:1,
+							user_type:0
+						},
+						condition:'='
+					},
+				};
+				const callback = (res) => {
+					if (res.info.data.length > 0) {
+						self.mainData.push.apply(self.mainData, res.info.data);
+					}
+					console.log('self.mainData', self.mainData)
+					self.$Utils.finishFunc('getMainData');
+				};
 				self.$apis.orderGet(postData, callback);
-			}
+			},
+			
 		}
 	};
 </script>

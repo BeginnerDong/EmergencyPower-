@@ -4,9 +4,9 @@
 		<view class="banner-box pdlr4">
 			<view class="banner pdtb15">
 				<swiper class="swiper-box" indicator-dots="true" autoplay="true" interval="3000" duration="1000" indicator-active-color="#0094dc">
-					<block v-for="(item,index) in labelData" :key="index">
+					<block v-for="(item,index) in sliderData.mainImg" :key="index">
 						<swiper-item class="swiper-item">
-							<image :src="item" class="slide-image" />
+							<image :src="item.url" class="slide-image"/>
 						</swiper-item>
 					</block>
 				</swiper>
@@ -33,31 +33,36 @@
 		<view class="pdlr4">
 			<view class="fs15 pdtb20 ftw">热门推荐</view>
 			<view class="rankingNav flexRowBetween fs13 color6 pdb15">
-				<view class="item flexCenter">
+				<view class="item flexCenter" @click="orderChange('sale_count')">
 					<view>销量</view>
 					<view class="fs-down flexColumn mgl5">
-						<view class="arrow top on"></view>
-						<view class="arrow bottom"></view>
+						<view class="arrow top" 
+						:class="orderItem=='sale_count'&&orderType=='asc'?'on':''"></view>
+						<view class="arrow bottom" 
+						:class="orderItem=='sale_count'&&orderType=='desc'?'on':''"></view>
 					</view>
 				</view>
-				<view class="item flexCenter">
+				<view class="item flexCenter" @click="orderChange('price')">
 					<view>价格</view>
 					<view class="fs-down flexColumn mgl5">
-						<view class="arrow top"></view>
-						<view class="arrow bottom on"></view>
+						<view class="arrow top"
+						:class="orderItem=='price'&&orderType=='asc'?'on':''"></view>
+						<view class="arrow bottom"
+						:class="orderItem=='price'&&orderType=='desc'?'on':''"></view>
 					</view>
 				</view>
 			</view>
 			<view class="proLis flexRowBetween">
-				<view class="item-lis boxShaow" v-for="(item,index) in produtList" :key="index" @click="Router.navigateTo({route:{path:'/pages/pageDetail/pageDetail'}})">
+				<view class="item-lis boxShaow" v-for="(item,index) in mainData" :key="index" :data-id="item.id"
+				@click="Router.navigateTo({route:{path:'/pages/pageDetail/pageDetail?id='+$event.currentTarget.dataset.id}})">
 					<view class="pic">
-						<image src="../../static/images/home-img.png" alt="" />
+						<image :src="item.mainImg&&item.mainImg[0]?item.mainImg[0].url:''" alt="" />
 					</view>
 					<view class="infor">
-						<view class="tit avoidOverflow fs13 pdb5">名称名称名称名称名称</view>
+						<view class="tit avoidOverflow fs13 pdb5">{{item.title}}</view>
 						<view class="flexRowBetween">
-							<view class="price">56.00</view>
-							<view class="fs10 color9">销量:562</view>
+							<view class="price">{{item.price}}</view>
+							<view class="fs10 color9">销量:{{item.sale_count}}</view>
 						</view>
 						
 					</view>
@@ -102,22 +107,121 @@
 				],
 				produtList: [
 					{},{},{},{}
-				]
+				],
+				sliderData:{},
+				mainData:[],
+				order:{},
+				orderItem:'distance',
+				orderType:'asc'
 			}
 		},
 		
-		onLoad() {
+		onLoad(options) {
 			const self = this;
-			// self.$Utils.loadAll(['getMainData'], self);
+			self.id = options.id;
+			self.paginate = self.$Utils.cloneForm(self.$AssetsConfig.paginate);
+			self.$Utils.loadAll(['getLocation','getSliderData'], self);
 		},
+		
+		onReachBottom() {
+			console.log('onReachBottom')
+			const self = this;
+			if (!self.isLoadAll && uni.getStorageSync('loadAllArray')) {
+				self.paginate.currentPage++;
+				self.getMainData()
+			};
+		},
+		
 		methods: {
-			getMainData() {
+			
+			orderChange(item){
 				const self = this;
-				console.log('852369')
+				self.order = {};
+				self.orderItem = item;
+				if(self.orderType=='desc'){
+					self.orderType='asc'
+				}else{
+					self.orderType='desc'
+				};
+				self.order = {
+					[item]:self.orderType
+				};
+				
+				console.log('self.order',self.order)
+				self.getMainData(true)
+			},
+			
+			getLocation() {
+				const self = this;
+				const callback = (res) => {
+					if (res) {
+						console.log('res', res)
+						if(res.authSetting){
+							console.log(232)
+							return
+						}
+						self.lng = res.location.lng;
+						self.lat = res.location.lat;
+						self.order = {
+							distance:'asc',
+							longitude:self.lng,
+							latitude:self.lat,
+						}
+						self.getMainData(true)
+					};
+				};
+				self.$Utils.getLocation('reverseGeocoder', callback);
+				self.$Utils.finishFunc('getLocation');
+			},
+			
+			getSliderData() {
+				const self = this;
 				const postData = {};
-				postData.tokenFuncName = 'getProjectToken';
-				self.$apis.orderGet(postData, callback);
-			}
+				postData.searchItem = {
+					thirdapp_id: 2,
+					title: '首页轮播图'
+				};
+				const callback = (res) => {
+					if (res.info.data.length > 0) {
+						self.sliderData = res.info.data[0]
+					}
+					console.log('self.sliderData', self.sliderData)
+					self.$Utils.finishFunc('getSliderData');
+				};
+				self.$apis.labelGet(postData, callback);
+			},
+			
+			getMainData(isNew) {
+				const self = this;
+				if (isNew) {
+					self.mainData = [];
+					self.paginate = {
+						count: 0,
+						currentPage: 1,
+						is_page: true,
+						pagesize: 5
+					}
+				};
+				const postData = {};
+				postData.paginate = self.$Utils.cloneForm(self.paginate);
+				postData.searchItem = {
+					type:1,
+					thirdapp_id: 2,
+					check_status:1,
+					listorder:['>',0]
+				};
+				if (JSON.stringify(self.order) != '{}') {
+					postData.order = self.$Utils.cloneForm(self.order);
+				};
+				const callback = (res) => {
+					if (res.info.data.length > 0) {
+						self.mainData.push.apply(self.mainData, res.info.data);
+					}
+					console.log('self.mainData', self.mainData)
+					self.$Utils.finishFunc('getMainData');
+				};
+				self.$apis.productGet(postData, callback);
+			},
 		}
 	};
 </script>

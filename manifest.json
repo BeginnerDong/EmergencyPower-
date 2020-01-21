@@ -1,5 +1,5 @@
 {
-    "name" : "uni-one",
+    "name" : "振邦华裕-应急发电小程序",
     "appid" : "",
     "description" : "",
     "versionName" : "1.0.0",
@@ -55,15 +55,19 @@
     /* 快应用特有相关 */
     "mp-weixin" : {
         /* 小程序特有相关 */
-        "appid" : "wx17e356eb62d1fbe5",
+        "appid" : "wxccba2f6cd8038d1c",
         "setting" : {
             "urlCheck" : false,
             "es6" : true,
             "postcss" : false,
-            "minified" : true
+            "minified" : false
         },
         "usingComponents" : false,
-        "permission" : {}
+        "permission" : {
+            "scope.userLocation" : {
+                "desc" : "获取您的地址"
+            }
+        }
     },
     "h5" : {
         "title" : "发电小程序",
