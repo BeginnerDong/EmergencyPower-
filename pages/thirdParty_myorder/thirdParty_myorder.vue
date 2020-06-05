@@ -25,8 +25,8 @@
 							<view class="avoidOverflow2 fs13">{{item.orderItem&&item.orderItem[0]&&
 							item.orderItem[0].snap_product?item.orderItem[0].snap_product.title:''}}</view>
 							<view class="Bmny flexRowBetween">
-								<view class="price fs14">{{item.orderItem&&item.orderItem[0]&&
-							item.orderItem[0].snap_product?item.orderItem[0].snap_product.price:''}}</view>
+								<!-- <view class="price fs14">{{item.orderItem&&item.orderItem[0]&&
+							item.orderItem[0].snap_product?item.orderItem[0].snap_product.price:''}}</view> -->
 							<view class="price fs14">{{item.price}}</view>
 								<view class="fs10 color6">已付：{{item.service_price}}元</view>
 							</view>
@@ -61,6 +61,18 @@
 							<view class="name fs12 color6 mgr15">地点</view>
 							<view class="text fs13">
 							{{item.snap_address&&item.snap_address.city?item.snap_address.city+item.snap_address.detail:''}}
+							</view>
+						</view>
+						<view class="lis flex pdb5">
+							<view class="name fs12 color6 mgr15">姓名</view>
+							<view class="text fs13">
+							{{item.snap_address&&item.snap_address.name?item.snap_address.name:''}}
+							</view>
+						</view>
+						<view class="lis flex pdb5">
+							<view class="name fs12 color6 mgr15">电话</view>
+							<view class="text fs13">
+							{{item&&item.phone?item.phone:''}}
 							</view>
 						</view>
 						<view class="lis flex pdb5" v-if="item.sku_id>0">
@@ -183,11 +195,11 @@
 						delete self.searchItem.accept;
 					}else if(self.current==2){
 						self.searchItem.accept = 0
-						delete self.searchItem.transport_status;
+						self.searchItem.transport_status!=2;
 					}else if(self.current==3){
 						self.searchItem.accept = 1;
 						//self.searchItem.transport_status = 1
-						delete self.searchItem.transport_status;
+						self.searchItem.transport_status!=2;
 					}else if(self.current==4){
 						self.searchItem.accept = 1;
 						self.searchItem.transport_status = 2
