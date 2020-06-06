@@ -1,6 +1,6 @@
 <template>
 	<view>
-		<view class="whiteBj">
+		<view class="whiteBj userBox">
 			<view class="userHead white pdlr4">
 				<view class="infor pdt20">
 					<view class="left flex">
@@ -34,13 +34,20 @@
 						<view>已完成</view>
 					</view>
 					<view class="item" @click="Router.navigateTo({route:{path:'/pages/user_myorder/user_myorder?current=5'}})" >
-						<image src="../../static/images/about-icon4.png"></image>
+						<image src="../../static/images/icon3.png"></image>
 						<view>已评价</view>
 					</view>
 				</view>
 			</view>
 			
 			<view class="myRowBetween fs13 mglr4 mgt25">
+				<view class="item flexRowBetween" @click="Router.navigateTo({route:{path:'/pages/refundOrder/refundOrder'}})" >
+					<view class="ll flex">
+						<image class="icon" src="../../static/images/icon2.png" mode=""></image>
+						<view class="">退款订单</view>
+					</view>
+					<view class="rr"><image class="arrowR" src="../../static/images/arrow-icon.png" mode=""></image></view>
+				</view>
 				<view class="item flexRowBetween" @click="Router.navigateTo({route:{path:'/pages/user_address/user_address'}})" >
 					<view class="ll flex">
 						<image class="icon" src="../../static/images/about-icon5.png" mode=""></image>
@@ -142,4 +149,8 @@
 	
 	.myRowBetween .ll .icon{width: 32rpx;height: 32rpx;margin-right: 20rpx;}
 	
+	.userBox{padding-bottom: 120rpx;}
+	.userBox2 .item:nth-child(4) image{width: 45rpx;}
+	
+	.myRowBetween .item:nth-child(1) .ll .icon{height: 30rpx;}
 </style>

@@ -81,6 +81,13 @@
 					</view>
 				</view>
 			</view>
+			<view class="item flexRowBetween">
+				<view class="ll">发票信息</view>
+				<view class="rr" @click="Router.navigateTo({route:{path:'/pages/invoiceInformation/invoiceInformation'}})">
+					<view slot="pCon" class="color9">不开发票</view>
+					<image class="arrowR" src="../../static/images/arrow-icon.png" mode=""></image>
+				</view>
+			</view>
 			<view class="item flexEnd">
 				<view>超过{{mainData&&mainData[0]&&mainData[0].product?mainData[0].product.distance:''}}公里，1公里收取{{mainData&&mainData[0]&&mainData[0].product?mainData[0].product.distance_price:''}}元</view>
 			</view>

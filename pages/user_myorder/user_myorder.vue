@@ -54,6 +54,8 @@
 						<view class="give-input"><input type="text" v-model="item.money" placeholder="请输入金额" placeholder-class="placeholder" /></view>
 					</view>
 					<div class="underBtn flexEnd pdb5 pdt15">
+						<span class="Bbtn gary">申请退款</span>
+						
 						<span class="Bbtn" v-if="item.accept==1&&item.transport_status!=2" @click="flowLogAdd(index,'all')">完成订单</span>
 						<span class="Bbtn gary" v-if="item.price>item.service_price" @click="flowLogAdd(index)">确定付款</span>
 						<span class="Bbtn gary" @click="orderUpdate(item.id)" v-if="item.accept==0">取消订单</span>

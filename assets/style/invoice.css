@@ -1,0 +1,12 @@
+.ivohead{line-height: 1;font-size: 28rpx;}
+	.ivoIcon{width: 30rpx;height: 30rpx;margin-right: 10rpx;}
+	
+	.ivoCon{background-color: #f5f5f5;border-radius: 10rpx;line-height: 26rpx;font-size: 28rpx;}
+	.ivoCon .item{border-top: 1px solid #d9d9d9;}
+	.ivoCon .item:nth-child(1){border-top: 0;}
+	.ivoCon .item input{height: 26rpx;}
+	.uni-input-placeholder{font-size: 26rpx;color: #999;}
+	
+	.ivoBtn{position: absolute;bottom: 15%;left: 0;right: 0;}
+	.ivoBtn .btn{width: 280rpx;height: 80rpx;border-radius: 10rpx;background-color: #222;color: #fff;text-align: center;line-height: 80rpx;}
+	.ivoBtn .btn:nth-child(2){background-color: #0094DC;}

@@ -97,18 +97,21 @@ textarea{width: 100%;padding: 20rpx; box-sizing: border-box;font-size: 24rpx;col
 .pdb15{padding-bottom: 30rpx;}
 .pdb20{padding-bottom: 40rpx;}
 .pdb25{padding-bottom: 50rpx;}
+.pdb30{padding-bottom: 60rpx;}
 
 .pdl5{padding-left: 10rpx;}
 .pdl10{padding-left: 20rpx;}
 .pdl15{padding-left: 30rpx;}
 .pdl20{padding-left: 40rpx;}
 .pdl25{padding-left: 50rpx;}
+.pdl30{padding-left: 60rpx;}
 
 .pdr5{padding-right: 10rpx;}
 .pdr10{padding-right: 20rpx;}
 .pdr15{padding-right: 30rpx;}
 .pdr20{padding-right: 40rpx;}
 .pdr25{padding-right: 50rpx;}
+.pdr30{padding-right: 60rpx;}
 
 .pdtb5{padding: 10rpx 0;}
 .pdtb10{padding: 20rpx 0;}

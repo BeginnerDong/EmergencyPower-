@@ -266,6 +266,27 @@
 				"onReachBottomDistance":100
 			}
 		}
+        ,{
+            "path" : "pages/invoiceInformation/invoiceInformation",
+            "style" : {
+							"navigationBarTitleText": "发票信息",//设置页面标题文字
+							"onReachBottomDistance":100
+						}
+        }
+        ,{
+            "path" : "pages/refund/refund",
+            "style" : {
+							"navigationBarTitleText": "申请退款",//设置页面标题文字
+							"onReachBottomDistance":100
+						}
+        }
+        ,{
+            "path" : "pages/refundOrder/refundOrder",
+            "style" : {
+							"navigationBarTitleText": "退款订单",//设置页面标题文字
+							"onReachBottomDistance":100
+						}
+        }
     ],
 	"globalStyle": {
 		//"navigationStyle":"custom",
