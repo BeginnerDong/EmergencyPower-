@@ -71,6 +71,13 @@
 					<image class="arrowR" src="../../static/images/arrow-icon.png" alt=""/>
 				</view>
 			</view>
+			<view class="item flexRowBetween">
+				<view class="ll">发票信息</view>
+				<view class="rr" @click="Router.navigateTo({route:{path:'/pages/invoiceInformation/invoiceInformation'}})">
+					<view slot="pCon" class="color9">{{receipt>0?'开发票':'不开发票'}}</view>
+					<image class="arrowR" src="../../static/images/arrow-icon.png" mode=""></image>
+				</view>
+			</view>
 			<view class="f5H5"></view>
 		</view>
 		<view class="pdtb25 f5bj"></view>
@@ -126,7 +133,8 @@
 				currChoose:1,
 				book_time :'',
 				distance:0,
-				distancePrice:0
+				distancePrice:0,
+				receipt:0
 			}
 		},
 		
@@ -153,6 +161,12 @@
 			}else{
 				self.getAddressData()
 			};
+			
+			if(uni.getStorageSync('receiptData')){
+				self.receipt = 10;
+			}else{
+				self.receipt = 0
+			}
 		},
 		
 		
@@ -292,14 +306,17 @@
 						self.$Utils.showToast('请选择预约时间','none')
 						return
 					};
-					var data = {
-						phone:self.phone,
-						book_time:self.book_time,
-						name:self.name,
-						shop_no:self.mainData[0].product.user_no,
-						price:self.pay.wxPay.price,
-						service_price:self.firstMoney
-					}
+					if(uni.getStorageSync('receiptData')){
+						data  = self.$Utils.cloneForm(uni.getStorageSync('receiptData'))
+					};
+					
+					data.phone=self.phone;
+					data.book_time=self.book_time;
+					data.name=self.name;
+					data.shop_no=self.mainData[0].product.user_no;
+					data.price=self.pay.wxPay.price;
+					data.service_price=self.firstMoney;
+				
 					var orderList = [
 						{product_id:self.mainData[0].product_id,count:self.count,type:1,data:data,snap_address:self.addressData}
 					];
@@ -320,11 +337,17 @@
 				const postData = {}; 
 				postData.orderList = self.$Utils.cloneForm(orderList);
 				postData.data = {};
+				if(uni.getStorageSync('receiptData')){
+					postData.data  = self.$Utils.cloneForm(uni.getStorageSync('receiptData'))
+				};
 				postData.data.snap_address = self.addressData;
 				postData.tokenFuncName = 'getProjectToken';
 				const callback = (res) => {
 					if (res && res.solely_code == 100000) {
 						self.orderId = res.info.id;
+						if(uni.getStorageSync('receiptData')){
+							uni.removeStorageSync('receiptData')
+						};
 						self.goPay()
 					} else {		
 						uni.setStorageSync('canClick', true);

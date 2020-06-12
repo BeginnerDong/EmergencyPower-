@@ -54,7 +54,8 @@
 						<view class="give-input"><input type="text" v-model="item.money" placeholder="请输入金额" placeholder-class="placeholder" /></view>
 					</view>
 					<div class="underBtn flexEnd pdb5 pdt15">
-						<span class="Bbtn gary">申请退款</span>
+						<span class="Bbtn gary" :data-id="item.id" 
+						@click="Router.navigateTo({route:{path:'/pages/refund/refund?id='+$event.currentTarget.dataset.id}})" v-if="item.accept==1&&item.transport_status!=2">申请退款</span>
 						
 						<span class="Bbtn" v-if="item.accept==1&&item.transport_status!=2" @click="flowLogAdd(index,'all')">完成订单</span>
 						<span class="Bbtn gary" v-if="item.price>item.service_price" @click="flowLogAdd(index)">确定付款</span>
@@ -80,7 +81,8 @@
 				current:1,
 				searchItem:{
 					type:1,
-					pay_status:1
+					pay_status:1,
+					order_step:0
 				},
 				mainData:[],
 				money:''
@@ -130,10 +132,11 @@
 					}else if(self.current==2){
 						self.searchItem.accept = 0
 						delete self.searchItem.isremark;
+						self.searchItem.transport_status != 2
 					}else if(self.current==3){
 						self.searchItem.accept = 1;
-						delete self.searchItem.isremark;
-						//self.searchItem.transport_status = 1
+						self.searchItem.isremark = 0;
+						self.searchItem.transport_status != 2
 					}else if(self.current==4){
 						self.searchItem.accept = 1;
 						self.searchItem.transport_status = 2;

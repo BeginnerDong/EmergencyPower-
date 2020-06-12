@@ -49,7 +49,8 @@
 				userInfoData:{},
 				submitData:{
 					count:''
-				}
+				},
+				
 			}
 		},
 		
@@ -91,7 +92,12 @@
 						self.$Utils.showToast('请输入正确的金额', 'none');
 						return
 					};
-						self.flowLogAdd();
+					if(parseFloat(self.submitData.count)<parseFloat(self.limit)){
+						uni.setStorageSync('canClick', true);
+						self.$Utils.showToast('最少提现'+self.limit+'元', 'none');
+						return
+					};
+					self.flowLogAdd();
 				} else {
 					uni.setStorageSync('canClick', true);
 					self.$Utils.showToast('请输入提现金额', 'none')
@@ -136,11 +142,13 @@
 					searchItem:{}
 				};
 				postData.tokenFuncName = 'getThirdToken';
-				postData.searchItem.user_no = uni.getStorageSync('thridInfo').user_no
+				postData.searchItem.user_no = uni.getStorageSync('thridInfo').user_no;
+				postData.refreshToken = true;
 				const callback = (res) => {
 					if (res.solely_code == 100000 && res.info.data[0]) {
 						self.userInfoData = res.info.data[0]
-						self.userInfoData.bank_card = self.userInfoData.bank_card.substr(self.userInfoData.bank_card.length-4)
+						self.userInfoData.bank_card = self.userInfoData.bank_card.substr(self.userInfoData.bank_card.length-4);
+						self.limit = parseFloat(uni.getStorageSync('thirdApp').limit)
 					} else {
 						self.$Utils.showToast(res.msg, 'none');
 					};
