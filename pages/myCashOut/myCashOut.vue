@@ -143,12 +143,12 @@
 				};
 				postData.tokenFuncName = 'getThirdToken';
 				postData.searchItem.user_no = uni.getStorageSync('thridInfo').user_no;
-				postData.refreshToken = true;
+				//postData.refreshToken = true;
 				const callback = (res) => {
 					if (res.solely_code == 100000 && res.info.data[0]) {
 						self.userInfoData = res.info.data[0]
 						self.userInfoData.bank_card = self.userInfoData.bank_card.substr(self.userInfoData.bank_card.length-4);
-						self.limit = parseFloat(uni.getStorageSync('thirdApp').limit)
+						self.limit = parseFloat(uni.getStorageSync('thridInfo').thirdApp.limit)
 					} else {
 						self.$Utils.showToast(res.msg, 'none');
 					};
